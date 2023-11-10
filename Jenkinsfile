@@ -29,11 +29,13 @@ pipeline {
 
                 sh "echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin"
 
-                sh "docker tag costii/custom-nginx costii/custom-nginx1:latest"
-
-                sh "docker push costii/custom-nginx1:latest"
-
+                sh 'docker tag my-mysql-image costii/my-mysql-image'
+                sh 'docker push costii/my-mysql-image'
+                sh 'docker tag my-flask-app-image costii/my-flask-app-image'
+                sh 'docker push costii/my-flask-app-image'
+                }
             }
+                
         }
     }
     post {
