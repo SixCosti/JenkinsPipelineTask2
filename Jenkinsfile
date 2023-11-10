@@ -21,7 +21,8 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'docker-compose up -d'
+                sh 'chmod +x deploy.sh'
+                sh './deploy.sh'
             }
         }
         stage('Push to Docker Hub') {
@@ -34,10 +35,8 @@ pipeline {
                 sh 'docker tag my-flask-app-image costii/my-flask-app-image'
                 sh 'docker push costii/my-flask-app-image'
                 }
-            }
-                
+            }       
         }
-    }
     post {
         always {
             sh 'docker-compose down'
