@@ -4,11 +4,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('jenkins-token1')
     }
     stages {
-        stage('Clone repository') {
-            steps {
-                git 'https://github.com/SixCosti/JenkinsPipelineTask2'
-            }
-        }
+
         stage('Build Docker Images') {
             steps {
                 dir('db') {
