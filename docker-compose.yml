@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: trio-task-mysql:5.7
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: mysql
+    networks:
+      - trio-task-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=flask-db
+
+  flask-app:
+    image: trio-task-flask-app:latest
+    build:
+      context: ./flask-app
+      dockerfile: Dockerfile
+    container_name: flask-app
+    networks:
+      - trio-task-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    depends_on:
+      - mysql
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    networks:
+      - trio-task-network
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - flask-app
+
+networks:
+  trio-task-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
